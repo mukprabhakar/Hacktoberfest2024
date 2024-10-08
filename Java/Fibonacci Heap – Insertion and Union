@@ -1,0 +1,147 @@
+Fibonacci Heap is a collection of trees with min-heap or max-heap property. In Fibonacci Heap, trees can have any shape even all trees can be single nodes (This is unlike Binomial Heap where every tree has to be a Binomial Tree). In this article, we will discuss Insertion and Union operation on Fibonacci Heap. 
+
+Prerequisites: Fibonacci Heap (Introduction)
+
+Insertion: To insert a node in a Fibonacci heap H, the following algorithm is followed: 
+
+
+
+Create a new node ‘x’.
+
+Check whether heap H is empty or not.
+
+If H is empty then: 
+Make x as the only node in the root list.
+Set H(min) pointer to x.
+
+
+Else: 
+Insert x into root list and update H(min).
+
+
+
+Example: 
+
+insert a node in a Fibonacci heap
+
+Union: Union of two Fibonacci heaps H1 and H2 can be accomplished as follows: 
+
+
+
+Join root lists of Fibonacci heaps H1 and H2 and make a single Fibonacci heap H.
+
+If H1(min) < H2(min) then: 
+H(min) = H1(min).
+
+
+Else: 
+H(min) = H2(min).
+
+
+
+Example: 
+
+Union of two Fibonacci heaps
+
+Following is a program to demonstrate building and inserting in a Fibonacci heap:  
+
+
+
+
+// Java program to demonstrate building and inserting in a
+// Fibonacci heap
+ 
+import java.io.*;
+ 
+class Node {
+    Node parent;
+    Node child;
+    Node left;
+    Node right;
+    int key;
+}
+ 
+class GFG {
+ 
+    // Creating min pointer as "mini"
+    static Node mini = null;
+ 
+    // Declare an integer for number of nodes in the heap
+    static int no_of_nodes = 0;
+ 
+    // Function to insert a node in heap
+    static void Insertion(int val)
+    {
+        Node new_node = new Node();
+        new_node.key = val;
+        new_node.parent = null;
+        new_node.child = null;
+        new_node.left = new_node;
+        new_node.right = new_node;
+ 
+        if (mini != null) {
+            (mini.left).right = new_node;
+            new_node.right = mini;
+            new_node.left = mini.left;
+            mini.left = new_node;
+ 
+            if (new_node.key < mini.key)
+                mini = new_node;
+        }
+        else {
+            mini = new_node;
+        }
+    }
+ 
+    // Function to display the heap
+    static void Display(Node mini)
+    {
+        Node ptr = mini;
+        if (ptr == null)
+            System.out.println("The Heap is Empty");
+ 
+        else {
+            System.out.println(
+                "The root nodes of Heap are: ");
+            do {
+                System.out.print(ptr.key);
+                ptr = ptr.right;
+                if (ptr != mini) {
+                    System.out.print("-->");
+                }
+            } while (ptr != mini && ptr.right != null);
+            System.out.println();
+            System.out.println("The heap has " + no_of_nodes
+                               + " nodes");
+        }
+    }
+ 
+    // Function to find min node in the heap
+    static void FindMin(Node mini)
+    {
+        System.out.println("min of heap is: " + mini.key);
+    }
+ 
+    public static void main(String[] args)
+    {
+        no_of_nodes = 7;
+        Insertion(4);
+        Insertion(3);
+        Insertion(7);
+        Insertion(5);
+        Insertion(2);
+        Insertion(1);
+        Insertion(10);
+ 
+        Display(mini);
+ 
+        FindMin(mini);
+    }
+}
+ 
+// This code is contributed by karthik.
+Output
+The root nodes of Heap are: 
+1-->2-->3-->4-->7-->5-->10
+The heap has 7 nodes
+min of heap is: 1
